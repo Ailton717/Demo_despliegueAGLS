@@ -5,8 +5,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+
 permissions:
   contents: read
+
 jobs:
   preparar-version:
     runs-on: windows-latest
@@ -25,10 +27,8 @@ jobs:
         run: ./desplegar.ps1 -RutaPHP 'php'
 
       - name: Guardar version preparada
-      uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: version-preparada
-          path: pruebas/index.php
-          if-no-files-found: error    
-
-  
+          path: Pruebas/index.php
+          if-no-files-found: error
