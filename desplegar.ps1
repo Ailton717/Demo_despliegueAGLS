@@ -1,13 +1,21 @@
-$archivoOrigen = Join-path $PSScriptRoot 'Origen\index.php'
-$archivoDestino = Join-path $PSScriptRoot 'Pruebas\index.php'
+param(
+    [string]$RutaPHP = "php"
+)
 
-& 'C:\xampp\php\php.exe' -l $archivoOrigen
+$archivoOrigen  = Join-Path $PSScriptRoot 'Origen\index.php'
+$archivoDestino = Join-Path $PSScriptRoot 'Pruebas\index.php'
 
-If ($LASTEXITCODE -ne 0) {
+# Verificar sintaxis del PHP
+& $RutaPHP -l $archivoOrigen
 
-    write-Host "Hay un error de sitaxis.NO se publico el cambio."
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "Hay un error de sintaxis. NO se publicó el cambio."
     exit 1
 }
+
+# Copiar a la carpeta de pruebas
 Copy-Item $archivoOrigen $archivoDestino -Force -ErrorAction Stop
-Write-Host "Vercion Publicada en el ambiente de pruebas."
-& 'C:\xampp\php\php.exe' -S localhost:8000 -t .\Pruebas
+Write-Host "Versión publicada en el ambiente de pruebas."
+
+# (Opcional) No levantes el servidor en CI, solo verifica y copia
+# & $RutaPHP -S localhost:8000 -t .\Pruebas
